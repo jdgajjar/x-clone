@@ -1,0 +1,167 @@
+<title><%= user.username %> / X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        .nav-item {
+            position: relative;
+            transition: background-color 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            background-color: #1d1f23;
+        }
+        
+        .post-hover {
+            transition: background-color 0.15s ease;
+        }
+        
+        .post-hover:hover {
+            background-color: rgba(31, 41, 55, 0.4);
+        }
+        
+        .action-hover {
+            transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .action-hover:hover {
+            transform: scale(1.1);
+        }
+    </style>
+
+        <!-- Main Content -->
+        <main class="flex-grow border-x border-gray-800 min-h-screen md:max-w-[600px]">
+            <!-- Profile Header -->
+            <div class="sticky top-0 z-30 bg-black/90 backdrop-blur-md">
+                <div class="flex items-center px-4 h-14">
+                    <a href="javascript:history.back()" class="p-2 rounded-full hover:bg-gray-800 transition-colors">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                    <div class="ml-6">
+                        <h1 class="font-bold text-xl"><%= user.username %></h1>
+                        <p class="text-gray-500 text-sm">0 posts</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="border-b border-gray-800">
+                <!-- Cover Image -->
+                <div class="h-48 bg-gray-800">
+                    <img class="w-full" src="<%= user.coverPhoto || '/images/cover_image.png' %>" alt="Cover Image">
+                </div>
+
+                <!-- Profile Details -->
+                <div class="px-4 pb-3">
+                    <div class="flex justify-between items-start -mt-16">
+                        <!-- Profile Image -->
+                        <div class="w-32 h-32 rounded-full border-4 border-black bg-blue-500 flex items-center justify-center">
+                            <span class="text-white text-4xl font-bold"><img src="<%= user.profilePhoto || '/images/profile.png' %>" alt="Profile Photo"></span>
+                        </div>
+                        
+                        <!-- Edit Profile / Follow Button -->
+                        <% if (locals.currentUser && locals.currentUser._id.toString() === user._id.toString()) { %>
+                            <a href="/profile/<%= user.id %>/edit" class="mt-4 px-4 py-1.5 bg-slate-900 border border-gray-600 rounded-full font-bold hover:bg-gray-800 transition-colors edit-profile-button">
+                                Edit profile
+                            </a>
+                        <% } else { %>
+                            <button 
+                                class="mt-4 px-4 py-1.5 rounded-full font-bold transition-colors follow-button"
+                                data-username="<%= user.username %>"
+                                data-following="<%= locals.currentUser && locals.currentUser.following.includes(user._id.toString()) %>">
+                                <%= locals.currentUser && locals.currentUser.following.includes(user._id.toString()) ? 'Following' : 'Follow' %>
+                            </button>
+                        <% } %>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="mt-4">
+                        <h2 class="font-bold text-xl"><%= user.username %></h2>
+                        <p class="text-gray-500">@<%= user.email.split('@')[0] %></p>
+                        
+                        <% if (user.bio) { %>
+                            <p class="mt-3"><%= user.bio %></p>
+                        <% } %>
+
+                        <div class="flex items-center gap-4 mt-3 text-gray-500">
+                            <% if (user.location) { %>
+                                <div class="flex items-center">
+                                    <span class="material-symbols-outlined mr-1">location_on</span>
+                                    <%= user.location %>
+                                </div>
+                            <% } %>
+                            
+                            <% if (user.website) { %>
+                                <a href="<%= user.website %>" target="_blank" class="flex items-center text-[#1d9bf0] hover:underline">
+                                    <span class="material-symbols-outlined mr-1">link</span>
+                                    <%= new URL(user.website).hostname %>
+                                </a>
+                            <% } %>
+
+                            <div class="flex items-center">
+                                <span class="material-symbols-outlined mr-1">calendar_month</span>
+                                Joined <%= user.createdAt ? user.createdAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently' %>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 mt-3">
+                            <a href="javascript:void(0)" onclick="loadFollowing('<%= user.username %>')" class="hover:underline">
+                                <span class="font-bold"><%= user.following ? user.following.length : 0 %></span>
+                                <span class="text-gray-500">Following</span>
+                            </a>
+                            <a href="javascript:void(0)" onclick="loadFollowers('<%= user.username %>')" class="hover:underline">
+                                <span class="font-bold"><%= user.followers ? user.followers.length : 0 %></span>
+                                <span class="text-gray-500">Followers</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+   
+
+            <!-- Dynamic Content Container -->
+            <div id="dynamic-content">
+                <!-- Posts -->
+                <div class="divide-y divide-gray-800">
+                    <div class="text-gray-500 text-center py-8">
+                        <p>You haven't posted anything yet.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/profile.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const editButton = document.querySelector('.edit-profile-button');
+            const editForm = document.getElementById('edit-profile-form');
+            const cancelEdit = document.getElementById('cancel-edit');
+
+            editButton.addEventListener('click', () => {
+                editForm.classList.toggle('hidden');
+            });
+
+            cancelEdit.addEventListener('click', () => {
+                editForm.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #000000;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Responsive textarea */
+  textarea {
+    min-height: 50px;
+    overflow-y: hidden;
+  }
+  
+  /* Improved hover effects */
+  .nav-item {
+    position: relative;
+    transition: all 0.2s ease;
+    color: #e7e9ea;
+  }
+  
+  .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  
+  .nav-item:hover span.material-symbols-outlined,
+  .nav-item:hover span.hidden.md\:block {
+    color: #fff;
+  }
+  
+  .active-nav-item {
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .active-nav-item span.material-symbols-outlined,
+  .active-nav-item span.hidden.md\:block {
+    color: #fff;
+  }
+  
+  .post-hover {
+    transition: background-color 0.15s ease;
+  }
+  
+  .post-hover:hover {
+    background-color: rgba(31, 41, 55, 0.4);
+  }
+  
+  .action-hover {
+    transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .action-hover:hover {
+    transform: scale(1.1);
+  }
+  
+  @media (max-width: 768px) {
+    textarea {
+      min-height: 40px;
+    }
+  }

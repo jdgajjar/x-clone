@@ -1,0 +1,59 @@
+<article class="border-b border-gray-800 p-4 post-hover cursor-pointer">
+  <div class="flex">
+    <div class="flex-shrink-0 mr-3">
+      <img src="<%= post.author.profileImage || 'default-avatar.png' %>" 
+           alt="<%= post.author.name %>" 
+           class="w-10 h-10 rounded-full" />
+    </div>
+    <div class="flex-grow">
+      <div class="flex items-center">
+        <span class="font-bold hover:underline mr-1"><%= post.author.name %></span>
+        <span class="text-gray-500 mr-1">@<%= post.author.username %></span>
+        <span class="text-gray-500">· <%= new Date(post.createdAt).toLocaleString() %></span>
+        <button class="ml-auto p-1 text-gray-500 rounded-full hover:bg-[#1d9bf0]/10 hover:text-[#1d9bf0] transition-colors action-hover">
+          <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+        </button>
+      </div>
+      
+      <div class="mt-1 text-[15px] leading-normal whitespace-pre-line">
+        <%= post.content %>
+      </div>
+      
+      <% if (post.image) { %>
+        <div class="mt-3 rounded-2xl overflow-hidden">
+          <img src="<%= post.image %>" alt="" class="w-full h-auto object-cover" />
+        </div>
+      <% } %>
+      
+      <div class="flex justify-between mt-3 text-gray-500 max-w-md">
+        <button onclick="toggleReply('<%= post._id %>')" class="flex items-center group action-hover">
+          <div class="p-2 rounded-full group-hover:bg-[#1d9bf0]/10 group-hover:text-[#1d9bf0] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+          </div>
+          <span class="text-sm ml-1 group-hover:text-[#1d9bf0]"><%= post.replies ? post.replies.length : 0 %></span>
+        </button>
+        <button onclick="toggleRepost('<%= post._id %>')" class="flex items-center group action-hover">
+          <div class="p-2 rounded-full group-hover:bg-green-500/10 group-hover:text-green-500 transition-colors">
+            <span class="material-symbols-outlined text-[18px]">repeat</span>
+          </div>
+          <span class="text-sm ml-1 group-hover:text-green-500"><%= post.reposts ? post.reposts.length : 0 %></span>
+        </button>
+        <button onclick="toggleLike('<%= post._id %>')" class="flex items-center group action-hover">
+          <div class="p-2 rounded-full group-hover:bg-pink-600/10 group-hover:text-pink-600 transition-colors">
+            <span class="material-symbols-outlined text-[18px]">favorite</span>
+          </div>
+          <span class="text-sm ml-1 group-hover:text-pink-600"><%= post.likes ? post.likes.length : 0 %></span>
+        </button>
+        <button onclick="toggleView('<%= post._id %>')" class="flex items-center group action-hover">
+          <div class="p-2 rounded-full group-hover:bg-[#1d9bf0]/10 group-hover:text-[#1d9bf0] transition-colors">
+            <span class="material-symbols-outlined text-[18px]">bar_chart</span>
+          </div>
+          <span class="text-sm ml-1 group-hover:text-[#1d9bf0]"><%= post.views ? post.views : 0 %></span>
+        </button>
+        <button onclick="sharePost('<%= post._id %>')" class="p-2 rounded-full hover:bg-[#1d9bf0]/10 hover:text-[#1d9bf0] transition-colors action-hover">
+          <span class="material-symbols-outlined text-[18px]">ios_share</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</article> 

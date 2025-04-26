@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Following / <%= user.username %> / X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="/js/profile.js" defer></script>
+    <script src="/js/tofollow.js"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="antialiased bg-black text-white font-sans" data-current-user-name="<%= locals.currentUser.username %>">
+    <div class="flex min-h-screen max-w-7xl mx-auto">
+        <!-- Main Content -->
+        <main class="flex-grow border-x border-gray-800 min-h-screen md:max-w-[600px]">
+            <!-- Header -->
+            <div class="sticky top-0 z-30 bg-black/90 backdrop-blur-md">
+                <div class="flex items-center px-4 h-14">
+                    <div class="ml-6">
+                        <h1 class="font-bold text-xl"><%= user.username %></h1>
+                        <p class="text-gray-500 text-sm">Following</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Following List -->
+            <div class="divide-y divide-gray-800">
+                <% if (following && following.length > 0) { %>
+                    <% following.forEach(followedUser => { %>
+                        <div class="flex items-center justify-between p-4 hover:bg-gray-900/50 transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                                    <span class="text-white text-xl font-bold"><%= followedUser.username[0].toUpperCase() %></span>
+                                </div>
+                                <div>
+                                    <a href="javascript:void(0);" onclick="loadProfile('<%= followedUser.username %>');" >
+                                    <h3 class="font-bold"><%= followedUser.username %></h3>
+                                    <p class="text-gray-500">
+                                        @<%= followedUser.email ? followedUser.email.split('@')[0] : 'unknown' %>
+                                    </p>
+                                </a>
+                                </div>
+                            </div>
+                            <button
+                                class="px-4 py-1.5 rounded-full font-bold transition-colors follow-button
+                                    <% if (locals.currentUser && locals.currentUser.following.includes(followedUser._id.toString())) { %>
+                                        bg-white text-black hover:bg-gray-200
+                                    <% } else { %>
+                                        bg-gray-800 text-white hover:bg-gray-700
+                                    <% } %>"
+                                data-username="<%= followedUser.username %>"
+                                data-following="<%= locals.currentUser && locals.currentUser.following.includes(followedUser._id.toString()) %>"
+                               >
+                                <% if (locals.currentUser && locals.currentUser.following.includes(followedUser._id.toString())) { %>
+                                    Following
+                                <% } else { %>
+                                    Follow
+                                <% } %>
+                            </button>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="p-8 text-center text-gray-500">
+                        <p>No following found</p>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+    <script>
+       async function loadProfile(username) {
+            window.location.href = await `/profile/${username}`;
+        }
+
+        window.handleFollowClick = async function(username) {
+            const button = document.querySelector(`button[data-username="${username}"]`);
+            const isFollowing = button.getAttribute('data-following') === 'true';
+
+            if (isFollowing) {
+                // Unfollow logic
+                button.setAttribute('data-following', 'false');
+                button.textContent = 'Follow';
+                button.classList.remove('bg-white', 'text-black', 'hover:bg-gray-200');
+                button.classList.add('bg-gray-800', 'text-white', 'hover:bg-gray-700');
+            } else {
+                // Follow logic
+                button.setAttribute('data-following', 'true');
+                button.textContent = 'Following';
+                button.classList.remove('bg-gray-800', 'text-white', 'hover:bg-gray-700');
+                button.classList.add('bg-white', 'text-black', 'hover:bg-gray-200');
+            }
+        };
+    </script>
+</body>
+</html>

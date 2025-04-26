@@ -1,0 +1,15 @@
+<main class="z-10 flex-grow border-x border-gray-800 min-h-screen md:max-w-[600px]">
+  <div id="timeline-content">
+    <% if (posts.length > 0) { %>
+      <% posts.forEach(post => { %>
+        <div class="post p-4 border-b border-gray-800">
+          <p><%= post.content %></p>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <div class="text-gray-500 text-center py-8">
+        <p>No posts yet. Start posting!</p>
+      </div>
+    <% } %>
+  </div>
+</main>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X.com Clone</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <!-- Profile Script -->
+  <script src="/js/profile.js" defer></script>
+  <script src="/js/follow.js" defer></script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    
+    /* Responsive textarea */
+    textarea {
+      min-height: 50px;
+      overflow-y: hidden;
+    }
+    
+    /* Improved hover effects */
+    .nav-item {
+      position: relative;
+      transition: all 0.2s ease;
+      color: #e7e9ea;
+    }
+    
+    .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    
+    .nav-item:hover span.material-symbols-outlined,
+    .nav-item:hover span.hidden.md\:block {
+      color: #fff;
+    }
+    
+    .active-nav-item {
+      font-weight: bold;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .active-nav-item span.material-symbols-outlined,
+    .active-nav-item span.hidden.md\:block {
+      color: #fff;
+    }
+    
+    .post-hover {
+      transition: background-color 0.15s ease;
+    }
+    
+    .post-hover:hover {
+      background-color: rgba(31, 41, 55, 0.4);
+    }
+    
+    .action-hover {
+      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .action-hover:hover {
+      transform: scale(1.1);
+    }
+    
+    @media (max-width: 768px) {
+      textarea {
+        min-height: 40px;
+      }
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'x-blue': 'hsl(203, 89%, 53%)'
+          }
+        }
+      }
+    }
+
+    function loadHome() {
+        window.location.href = '/home';
+    }
+  </script>
+</head>
+<body class="antialiased bg-black text-white font-sans" data-current-user-name="<%= user.username %>">
+  <div class="fixed top-0 left-0 w-full bg-black z-50">
+    <%- include('homehead') %>
+  </div>
+  <div class="flex min-h-screen mt-[55px] max-w-7xl mx-auto">
+     <!-- Include homehead content -->
+    
+    
+    <!-- Sidebar - Left Column -->
+    <header class="md:w-[275px] lg:w-[300px] xl:w-[340px] w-fit z-0 ">
+      <div class="fixed bottom-0  md:h-screen py-0 md:py-2 w-fit z-0">
+        <div class="flex md:flex-col h-16 md:h-full overflow-y-auto">
+         
+          
+            
+          
+          
+          <!-- Navigation - Mobile Bottom Bar -->
+          <nav class="fixed bottom-0 left-0 right-0 border-t border-gray-800 bg-black md:border-0 md:relative md:bg-transparent md:mt-[55px] z-0">
+            <ul class="flex justify-around md:justify-start md:flex-col md:space-y-1 px-0 md:px-2 py-2 md:py-0">
+               <!-- Home -->
+    <li class="md:w-fit">
+      <a href="javascript:void(0);" onclick="loadHome();" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-[26px] md:mr-4">home</span>
+        <span class="hidden md:block text-xl">Home</span>
+      </a>
+    </li>
+             
+              <li class="md:w-fit">
+                <a href="/notifications" onclick="setActiveNav(this); return false;" class="nav-item flex items-center space-x-4 text-gray-300 p-3 rounded-full transition-colors">
+                  <span class="material-symbols-outlined">notifications</span>
+                  <span>Notifications</span>
+                </a>
+              </li>
+              
+              <!-- Messages -->
+              <li class="md:w-fit">
+                <a href="#" onclick="setActiveNav(this); return false;" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+                  <span class="material-symbols-outlined text-[26px] md:mr-4">message</span>
+                  <span class="hidden md:block text-xl">Messages</span>
+                </a>
+              </li>
+              <!-- Lists -->
+              <li class="hidden md:block md:w-fit">
+                <a href="#" onclick="setActiveNav(this); return false;" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+                  <span class="material-symbols-outlined text-[26px] md:mr-4">lists</span>
+                  <span class="hidden md:block text-xl">Lists</span>
+                </a>
+              </li>
+              <!-- Bookmarks -->
+              <li class="hidden md:block md:w-fit">
+                <a href="#" onclick="setActiveNav(this); return false;" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+                  <span class="material-symbols-outlined text-[26px] md:mr-4">bookmarks</span>
+                  <span class="hidden md:block text-xl">Bookmarks</span>
+                </a>
+              </li>
+              <!-- Communities -->
+              <li class="hidden md:block md:w-fit">
+                <a href="#" onclick="setActiveNav(this); return false;" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+                  <span class="material-symbols-outlined text-[26px] md:mr-4">group</span>
+                  <span class="hidden md:block text-xl">Communities</span>
+                </a>
+              </li>
+              <!-- Premium -->
+              <li class="hidden md:block md:w-fit">
+                <a href="#" onclick="setActiveNav(this); return false;" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+                  <span class="material-symbols-outlined text-[26px] md:mr-4">box</span>
+                  <span class="hidden md:block text-xl">Premium</span>
+                </a>
+              </li>
+              <!-- Profile -->
+    <li class="md:w-fit">
+      <a href="javascript:void(0);" onclick="loadProfile('<%= user.username %>');" class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+        <span class="material-symbols-outlined text-[26px] md:mr-4">person</span>
+        <span class="hidden md:block text-xl">Profile</span>
+      </a>
+    </li>
+              
+              <!-- More -->
+              <li class="hidden md:block md:w-fit">
+                <a href="/<%= user._id %>/settings"  class="nav-item flex items-center justify-center md:justify-start p-3 rounded-full transition-colors group">
+                  <span class="material-symbols-outlined text-[26px] md:mr-4">pending</span>
+                  <span class="hidden md:block text-xl">More</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          
+          <!-- Post Button - Fixed to bottom right on mobile, in sidebar on larger screens -->
+          <div class="fixed right-4 bottom-20 md:static md:mt-4 md:mr-auto ml-5 z-10">
+            <button class="bg-[#1d9bf0] hover:bg-[#1A8CD8] text-white rounded-full p-3 md:py-3 md:px-8 shadow-lg transition-colors w-14 h-14 md:w-auto md:h-auto flex items-center justify-center">
+              <span class="material-symbols-outlined md:hidden">edit</span>
+              <span class="hidden md:inline font-bold text-lg">Post</span>
+            </button>
+          </div>
+          
+          <!-- User Profile - Hidden on mobile, visible on larger screens -->
+          <div class="w-fit flex justify-between md:block mt-auto mb-4 px-3">
+            <button class="nav-item flex items-center w-full p-3 rounded-full transition-colors">
+              <% if (user.profileImage) { %>
+                <img 
+                  src="<%= user.profileImage %>" 
+                  alt="<%= user.name %>" 
+                  class="w-10 h-10 rounded-full mr-3"
+                />
+              <% } else { %>
+                <img 
+                  src="/images/profile.png" 
+                  alt="<%= user.name %>" 
+                  class="w-10 h-10 rounded-full mr-3"
+                />
+              <% } %>
+              <div class="flex gap-x-1">
+                <p class="font-bold text-sm leading-tight"><%= user.name %></p>
+                <p class="text-gray-500 text-sm">@<%= user.username %></p>
+              </div>
+              <span class="material-symbols-outlined pl-5 py-5">more_horiz</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow border-x border-gray-800 min-h-screen md:max-w-[600px]">
+        <!-- Header -->
+        <div class="sticky top-0 z-30 bg-black/90 backdrop-blur-md">
+            <div class="flex items-center px-4 h-14">
+                <h1 class="font-bold text-xl">Home</h1>
+            </div>
+        </div>
+
+        <!-- Dynamic Content Container -->
+        <div id="dynamic-content">
+            <!-- Posts will be loaded here -->
+            <% if (posts && posts.length > 0) { %>
+                <% posts.forEach(post => { %>
+                    <div class="border-b border-gray-800 p-4 hover:bg-gray-900/50 transition-colors">
+                        <div class="flex space-x-3">
+                            <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                                <span class="text-white text-xl font-bold"><%= user.username[0].toUpperCase() %></span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center space-x-2">
+                                    <h3 class="font-bold"><%= user.username %></h3>
+                                    <span class="text-gray-500">@<%= user.email.split('@')[0] %></span>
+                                </div>
+                                <p class="mt-1"><%= post.content %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="p-8 text-center text-gray-500">
+                    <p>No posts found</p>
+                </div>
+            <% } %>
+        </div>
+    </main>
+
+    <!-- Right Sidebar - Trending Section -->
+    <aside class="z-6 mt-10 w-full lg:w-[350px] xl:w-[390px] border-l border-gray-800 px-4 lg:pl-6 py-3 min-h-screen">
+   
+      <!-- Premium Card -->
+      <div class="bg-[#16181C] rounded-2xl p-4 mt-4">
+        <h2 class="font-bold text-xl mb-2">Subscribe to Premium</h2>
+        <p class="mb-3">Subscribe to unlock new features and if eligible, receive a share of ads revenue.</p>
+        <button class="bg-[#1d9bf0] hover:bg-[#1A8CD8] text-white font-bold rounded-full px-4 py-2 transition-colors">
+          Subscribe
+        </button>
+      </div>
+      
+      <!-- Trending Section -->
+      <div class="bg-[#16181C] rounded-2xl mt-4">
+        <h2 class="font-bold text-xl p-4">What's happening</h2>
+        
+        <!-- Trending Item 1 -->
+        <div class="px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors">
+          <div class="flex justify-between">
+            <div>
+              <div class="text-gray-500 text-xs">Technology · Trending</div>
+              <div class="font-bold mt-0.5">Artificial Intelligence</div>
+              <div class="text-gray-500 text-xs mt-0.5">124K posts</div>
+            </div>
+            <button class="p-1 text-gray-500 rounded-full hover:bg-[#1d9bf0]/10 hover:text-[#1d9bf0] transition-colors self-start action-hover">
+              <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Trending Item 2 -->
+        <div class="px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors post-hover">
+          <div class="flex justify-between">
+            <div>
+              <div class="text-gray-500 text-xs">Sports · Trending</div>
+              <div class="font-bold mt-0.5">#Champions League</div>
+              <div class="text-gray-500 text-xs mt-0.5">85.2K posts</div>
+            </div>
+            <button class="p-1 text-gray-500 rounded-full hover:bg-[#1d9bf0]/10 hover:text-[#1d9bf0] transition-colors self-start action-hover">
+              <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Trending Item 3 -->
+        <div class="px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors post-hover">
+          <div class="flex justify-between">
+            <div>
+              <div class="text-gray-500 text-xs">Entertainment · Trending</div>
+              <div class="font-bold mt-0.5">Deadpool</div>
+              <div class="text-gray-500 text-xs mt-0.5">42.8K posts</div>
+            </div>
+            <button class="p-1 text-gray-500 rounded-full hover:bg-[#1d9bf0]/10 hover:text-[#1d9bf0] transition-colors self-start action-hover">
+              <span class="material-symbols-outlined text-[16px]">more_horiz</span>
+            </button>
+          </div>
+        </div>
+        
+        <a href="#" class="block px-4 py-3 text-[#1d9bf0] hover:bg-white/5 rounded-b-2xl transition-colors">
+          Show more
+        </a>
+      </div>
+      
+      <!-- Who to follow -->
+      <div class="bg-[#16181C] rounded-2xl mt-4">
+        <h2 class="font-bold text-xl p-4">Who to follow</h2>
+        <% for (const randomuser of randomusers) { %>
+          
+          <!-- Suggested Users -->
+       <div id="suggested-users">
+         <div class="flex items-center justify-between px-4 py-3  hover:bg-gray-900">
+           <div class="flex items-center">
+             <img src="<%=randomuser.profileImage%>" alt="X Clone" class="w-10 h-10 rounded-full">
+             <div class="ml-3">
+               <div class="text-sm font-medium text-gray-900"><%= randomuser.name  %></div>
+               <div class="text-sm"><%= randomuser.username  %></div>
+             </div>
+           </div>
+           <button class="follow-btn px-4 py-1 text-sm font-medium text-white bg-blue-500 rounded-full hover:bg-blue-600">
+             Follow
+           </button>
+         </div>
+         <!-- Additional users will be loaded here dynamically -->
+       </div>
+       
+      
+       <% } %>
+       
+        <a href="#" class="block px-4 py-3 text-[#1d9bf0] hover:bg-white/5 rounded-b-2xl transition-colors">
+          Show more
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="px-4 py-4 text-gray-500 text-sm">
+        <div class="flex flex-wrap gap-x-4 gap-y-1">
+          <a href="#" class="hover:underline">Terms of Service</a>
+          <a href="#" class="hover:underline">Privacy Policy</a>
+          <a href="#" class="hover:underline">Cookie Policy</a>
+          <a href="#" class="hover:underline">Accessibility</a>
+          <a href="#" class="hover:underline">Ads info</a>
+          <a href="#" class="hover:underline">More</a>
+        </div>
+        <div class="mt-2">© 2026 X Corp.</div>
+      </footer>
+    </aside>
+  </div>
+
+  <script>
+    function toggleProfile() {
+      const timelineContent = document.getElementById('timeline-content');
+      const profileContent = document.getElementById('profile-content');
+      const followingList = document.getElementById('following-list');
+      
+      if (profileContent.classList.contains('hidden')) {
+        timelineContent.classList.add('hidden');
+        profileContent.classList.remove('hidden');
+        followingList.classList.add('hidden');
+      } else {
+        timelineContent.classList.remove('hidden');
+        profileContent.classList.add('hidden');
+        followingList.classList.add('hidden');
+      }
+    }
+
+    function showFollowingList() {
+      const followingList = document.getElementById('following-list');
+      followingList.classList.remove('hidden');
+    }
+
+    function hideFollowingList() {
+      const followingList = document.getElementById('following-list');
+      followingList.classList.add('hidden');
+    }
+
+    function setActiveNav(element) {
+      // Remove active class from all nav items
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active-nav-item');
+      });
+      
+      // Add active class to clicked item
+      element.classList.add('active-nav-item');
+    }
+
+    function switchTab(tab) {
+      // Update tab buttons
+      document.querySelectorAll('.tab-button').forEach(button => {
+        const buttonTab = button.getAttribute('data-tab');
+        if (buttonTab === tab) {
+          button.classList.remove('text-gray-500');
+          button.classList.add('text-white');
+          button.querySelector('.tab-indicator').classList.remove('hidden');
+        } else {
+          button.classList.remove('text-white');
+          button.classList.add('text-gray-500');
+          button.querySelector('.tab-indicator').classList.add('hidden');
+        }
+      });
+
+      // Show/hide content
+      document.getElementById('byjenish-content').classList.toggle('hidden', tab !== 'byjenish');
+    }
+
+    
+
+    
+
+    // Reply modal functions
+    function closeReplyModal() {
+      const modal = document.getElementById('reply-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        // Clear the form
+        const textarea = modal.querySelector('textarea');
+        if (textarea) {
+          textarea.value = '';
+        }
+        removeReplyImage();
+      }
+    }
+
+    function handleReplyImageUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('reply-image-preview');
+          const container = document.getElementById('reply-image-preview-container');
+          if (preview && container) {
+            preview.src = e.target.result;
+            container.classList.remove('hidden');
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function removeReplyImage() {
+      const preview = document.getElementById('reply-image-preview');
+      const container = document.getElementById('reply-image-preview-container');
+      const input = document.querySelector('#reply-modal input[type="file"]');
+      if (preview && container && input) {
+        preview.src = '';
+        container.classList.add('hidden');
+        input.value = '';
+      }
+    }
+
+    async function submitReply() {
+      const modal = document.getElementById('reply-modal');
+      const postId = modal.dataset.postId;
+      const textarea = modal.querySelector('textarea');
+      const content = textarea.value;
+      const imageInput = modal.querySelector('input[type="file"]');
+      const formData = new FormData();
+      formData.append('content', content);
+      if (imageInput.files[0]) {
+        formData.append('image', imageInput.files[0]);
+      }
+
+      try {
+        const response = await fetch(`/api/posts/${postId}/reply`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Add the reply to the post's replies
+          const post = document.querySelector(`[data-post-id="${postId}"]`);
+          if (post) {
+            const repliesContainer = post.querySelector('.replies-container');
+            if (repliesContainer) {
+              const replyElement = createPostElement(data);
+              repliesContainer.appendChild(replyElement);
+            }
+          }
+          // Close the modal and clear the form
+          closeReplyModal();
+          // Update the reply count
+          const replyButton = document.querySelector(`[onclick="toggleReply('${postId}')"]`);
+          if (replyButton) {
+            const countSpan = replyButton.querySelector('span:last-child');
+            const currentCount = parseInt(countSpan.textContent);
+            countSpan.textContent = currentCount + 1;
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    // Image upload functions
+    function removeImage() {
+      const preview = document.getElementById('image-preview');
+      const container = document.getElementById('image-preview-container');
+      const input = document.querySelector('input[type="file"]');
+      if (preview && container && input) {
+        preview.src = '';
+        container.classList.add('hidden');
+        input.value = '';
+      }
+    }
+
+    // Update the existing handleImageUpload function
+    function handleImageUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('image-preview');
+          const container = document.getElementById('image-preview-container');
+          if (preview && container) {
+            preview.src = e.target.result;
+            container.classList.remove('hidden');
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+</body>
+</html>
